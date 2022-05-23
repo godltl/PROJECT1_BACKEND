@@ -34,7 +34,7 @@ namespace PROJECT1.Controllers
 
         // GET: api/Passengers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Passenger>> GetPassenger(string id)
+        public async Task<ActionResult<Passenger>> GetPassenger(int id)
         {
           if (_context.Passengers == null)
           {
@@ -53,7 +53,7 @@ namespace PROJECT1.Controllers
         // PUT: api/Passengers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPassenger(string id, Passenger passenger)
+        public async Task<IActionResult> PutPassenger(int id, Passenger passenger)
         {
             if (id != passenger.PassengerId)
             {
@@ -91,28 +91,14 @@ namespace PROJECT1.Controllers
               return Problem("Entity set 'DataContext.Passengers'  is null.");
           }
             _context.Passengers.Add(passenger);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (PassengerExists(passenger.PassengerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPassenger", new { id = passenger.PassengerId }, passenger);
         }
 
         // DELETE: api/Passengers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePassenger(string id)
+        public async Task<IActionResult> DeletePassenger(int id)
         {
             if (_context.Passengers == null)
             {
@@ -130,7 +116,7 @@ namespace PROJECT1.Controllers
             return NoContent();
         }
 
-        private bool PassengerExists(string id)
+        private bool PassengerExists(int id)
         {
             return (_context.Passengers?.Any(e => e.PassengerId == id)).GetValueOrDefault();
         }
